@@ -8,6 +8,8 @@ import spray.httpx.encoding._
 
 object Main {
   def main(args: Array[String]) {
-
   }
+}
+
+trait SlackService extends HttpService {
 }
