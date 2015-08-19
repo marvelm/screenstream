@@ -25,7 +25,7 @@ trait YoutubeOAuth extends HttpService {
         val scopes = """https://www.googleapis.com/auth/youtube
 https://www.googleapis.com/auth/youtube.upload
 https://www.googleapis.com/auth/youtube.readonly
-""".split("\n").foldLeft("")(encode(_) + "," + encode(_))
+""".split("\n").foldLeft("")(_ + "," + encode(_))
 
         val url = s"""https://accounts.google.com/o/oauth2/auth?
 client_id=${encode(Config.ytClientId)}&
