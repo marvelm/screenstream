@@ -1,4 +1,4 @@
-name := "Screen Stream"
+name := "ScreenStream"
 
 version := "0.0.1"
 
@@ -21,6 +21,9 @@ libraryDependencies ++= {
   Seq(
     "org.specs2"        %% "specs2"             % "2.3.12"           % "test",
     "io.spray" %% "spray-routing" % sprayVersion,
+    "io.spray" %% "spray-client" % sprayVersion,
+    "io.spray" %% "spray-httpx" % sprayVersion,
+    "io.spray" %%  "spray-json" % "1.3.2",
     "com.typesafe.akka" %% "akka-actor" % "2.3.9"
   )
 }
