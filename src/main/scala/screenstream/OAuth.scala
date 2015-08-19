@@ -6,6 +6,9 @@ import scala.concurrent.ExecutionContext.Implicits.global
 
 import java.net.URI
 import java.net.URLEncoder
+import java.sql.Timestamp
+import java.util.Date
+import java.util.Calendar
 
 import spray.routing.HttpService
 import spray.routing.authentication.BasicAuth
@@ -19,6 +22,9 @@ import spray.http._
 import spray.client.pipelining._
 import spray.json._
 import DefaultJsonProtocol._
+
+import slick.dbio.DBIO
+import slick.driver.PostgresDriver.api._
 
 trait YoutubeOAuth extends HttpService {
   def encode(str: String) = URLEncoder.encode(str, "UTF-8")
@@ -67,11 +73,24 @@ client_secret=${encode(Config.ytClientSecret)}
                 val accessToken = fields("access_token").toString()
                 val tokenType = fields("token_type").toString() // Bearer
                 val expiresIn = fields("expires_in").toString().toInt
-                val refreshToken = fields("refresh_token").toString().toInt
+                val refreshToken = fields("refresh_token").toString()
+                val timestamp = new Timestamp(Calendar.getInstance().getTime().getTime())
+
+                DBIO.seq(
+                  Models.youtubeTokens +=
+                    YoutubeToken(
+                      0,
+                      timestamp,
+                      accessToken,
+                      tokenType,
+                      expiresIn,
+                      refreshToken
+                    )
+                )
 
                 // TODO add to db
                 <h1>You have been authenticated</h1>
-              }.recover {
+              } recover {
                 case _ => <h1>Error authenticating</h1>
               }
             }
